@@ -32,7 +32,7 @@ wss.on('connection', (socket) => {
     console.log("🎮 Received:", txt);
 
     if (txt === "start") {
-      idcounter = 1;
+      idcounter = 2;
       return;
     }
 
