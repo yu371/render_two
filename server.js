@@ -20,10 +20,6 @@ wss.on('connection', (socket) => {
   
   const id = idcounter++;
   socketMap.set(socket, id);
-  if(id === 1)
-  {
-    return;
-  }
   // そのクライアントにだけ ID を送信
   socket.send(JSON.stringify({ id }));
   for (const [client, id] of socketMap.entries()) {
@@ -51,13 +47,9 @@ wss.on('connection', (socket) => {
     // const senderId = socketMap.get(socket);
     
     // ish === 1 → 全員に中継（ホスト以外のクライアントにも）
-    // if (data.ish === 1) {
-    //   for (const client of socketMap.keys()) {
-    //     if (client !== socket && client.readyState === WebSocket.OPEN) {
-    //       client.send(txt);
-    //     }
-    //   }
-    // }
+    if (data.ish === 1) {
+      socketMap.set(socket, 1);
+    }
     // ish === 0 → ホスト（IDが1）にだけ送信
     if (data.ish === 0) {
       for (const [client, id] of socketMap.entries()) {
