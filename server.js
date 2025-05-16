@@ -27,7 +27,6 @@ wss.on('connection', (socket) => {
       }
   socket.on('message', (msg) => {
     const txt = msg.toString();
-    console.log("🎮 Received:", txt);
 
     if (txt === "start") {
       idcounter = 2;
@@ -54,6 +53,7 @@ wss.on('connection', (socket) => {
     if (data.ish === 0) {
       for (const [client, id] of socketMap.entries()) {
         if (id === 1 && client.readyState === WebSocket.OPEN) {
+          console.log("hostsend",txt)
           client.send(txt);
         }
       }
