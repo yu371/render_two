@@ -10,16 +10,14 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static('public'));
 let idcounter = 2; 
 const socketMap = new Map()
-// app.post('/reset-id', (req, res) => {
-//   idcounter = 1;
-//   console.log('🔄 IDカウンターを1にリセットしました');
-//   res.json({ message: 'ID counter reset to 1' });
-// });
+
+
 wss.on('connection', (socket) => {
   console.log("✅ Client connected");
   
   const id = idcounter++;
   socketMap.set(socket, id);
+  console.log(id);
   // そのクライアントにだけ ID を送信
   socket.send(JSON.stringify({ id }));
   for (const [client, id] of socketMap.entries()) {
@@ -35,6 +33,10 @@ wss.on('connection', (socket) => {
       idcounter = 2;
       return;
     }
+    if(txt === "close"){
+      socket.close();
+      return;
+    }
 
     let data;
     try {
@@ -45,12 +47,10 @@ wss.on('connection', (socket) => {
     }
 
     // const senderId = socketMap.get(socket);
-    
-    // ish === 1 → 全員に中継（ホスト以外のクライアントにも）
     if (data.ish === 1) {
+      socketMap.delete(socket);
       socketMap.set(socket, 1);
     }
-    // ish === 0 → ホスト（IDが1）にだけ送信
     if (data.ish === 0) {
       for (const [client, id] of socketMap.entries()) {
         if (id === 1 && client.readyState === WebSocket.OPEN) {
@@ -63,7 +63,6 @@ wss.on('connection', (socket) => {
   socket.on('close', () => {
     const closedId = socketMap.get(socket);
     console.log(`❌ Client disconnected (id: ${closedId})`);
-    socketMap.delete(socket);
 
     for (const [client, _] of socketMap) {
       if (client.readyState === WebSocket.OPEN) {
@@ -79,5 +78,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT} http://localhost:8000/`);
+  console.log(` ${PORT} or http://localhost:8000/`);
 });
