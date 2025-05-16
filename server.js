@@ -30,11 +30,12 @@ wss.on('connection', (socket) => {
 
     if (txt === "start") {
       idcounter = 2;
-      return;
+      console.log("id = 2");
     }
+    else
+    {
     if(txt === "close"){
       socket.close();
-      return;
     }
 
     let data;
@@ -58,6 +59,7 @@ wss.on('connection', (socket) => {
         }
       }
     }
+  }
   });
 
   socket.on('close', () => {
