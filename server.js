@@ -47,7 +47,6 @@ wss.on('connection', (socket) => {
 
     // const senderId = socketMap.get(socket);
     if (data.ish === 1) {
-      socketMap.delete(socket);
       socketMap.set(socket, 1);
     }
     if (data.ish === 0) {
