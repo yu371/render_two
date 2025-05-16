@@ -52,6 +52,7 @@ wss.on('connection', (socket) => {
     }
     if (data.ish === 0) {
       for (const [client, id] of socketMap.entries()) {
+        console.log(id);
         if (id === 1 && client.readyState === WebSocket.OPEN) {
           console.log("hostsend",txt)
           client.send(txt);
