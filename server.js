@@ -10,7 +10,7 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static('public'));
 let idcounter = 2; 
 const socketMap = new Map()
-const s = null;
+let s = null;
 
 wss.on('connection', (socket) => {
   console.log("✅ Client connected");
