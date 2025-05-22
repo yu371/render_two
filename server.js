@@ -10,7 +10,7 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static('public'));
 let idcounter = 2; 
 const socketMap = new Map()
-
+const s = null;
 
 wss.on('connection', (socket) => {
   console.log("✅ Client connected");
@@ -48,19 +48,24 @@ wss.on('connection', (socket) => {
 
     // const senderId = socketMap.get(socket);
     if (data.ish === 1) {
-      socketMap.set(socket, 1);
+      s = socket;
     }
     if (data.ish === 0) {
-      for (const [client, id] of socketMap.entries()) {
-        console.log(id);
-        if (client.readyState === WebSocket.OPEN) {
-          if(id === 1)
-          {
-          console.log("hostsend",txt)
-          client.send(txt);
-          }
-        }
+      if(s !== null)
+      {
+        console.log("hs:",txt);
+        s.send(txt);
       }
+      // for (const [client, id] of socketMap.entries()) {
+      //   console.log(id);
+      //   if (client.readyState === WebSocket.OPEN) {
+      //     if(id === 1)
+      //     {
+      //     console.log("hostsend",txt)
+      //     s.send(txt);
+      //     }
+      //   }
+      // }
     }
   }
   });
